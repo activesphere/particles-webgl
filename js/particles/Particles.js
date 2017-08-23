@@ -1,6 +1,6 @@
 "use strict";
 
-var THREE = require("lib/three/Three");
+var THREE = require("./../lib/three/three");
 var DoubleFBO = require("./DoubleFBO");
 var ParticlesModel = require("./ParticlesModel");
 var ParticlesGeometry = require("./ParticlesGeometry");

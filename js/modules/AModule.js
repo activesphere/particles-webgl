@@ -1,10 +1,10 @@
 "use strict";
 
-var $ = require("lib/zepto/zepto");
-var RequestAnimationFrame = require("lib/anonymous/utils/RequestAnimationFrame");
-var Stats = require("lib/stats/Stats");
-var Stage = require("lib/anonymous/core/Stage");
-var Easing = require("lib/zepto/Easing");
+var $ = require("./../lib/zepto/zepto");
+var RequestAnimationFrame = require("./../lib/anonymous/utils/RequestAnimationFrame");
+var Stats = require("./../lib/stats/stats");
+var Stage = require("./../lib/anonymous/core/Stage");
+var Easing = require("./../lib/zepto/Easing");
 
 /**
  * AModule abstract class

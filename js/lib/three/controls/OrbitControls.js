@@ -1,4 +1,4 @@
-var THREE = require("lib/three/three");
+var THREE = require("./lib/three/three");
 
 /**
  * @author qiao / https://github.com/qiao

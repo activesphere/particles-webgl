@@ -1,6 +1,6 @@
 "use strict";
 
-var GUI = require("lib/dat/dat.gui");
+var GUI = require("./../lib/dat/dat.gui");
 
 /**
  * Controller

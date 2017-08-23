@@ -1,9 +1,10 @@
 "use strict";
 
+
 var Config = require("./Config");
 var Particles = require("./particles/Particles");
-var Webcam = require("lib/anonymous/components/webcam/Webcam");
-var AModule = require("modules/AModule");
+var Webcam = require("./lib/anonymous/components/webcam/Webcam");
+var AModule = require("./modules/AModule");
 
 /**
  * Main

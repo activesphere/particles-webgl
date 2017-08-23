@@ -1,0 +1,19 @@
+{
+  "name": "particles",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "dependencies": {},
+  "devDependencies": {
+    "browserify": "^14.4.0",
+    "browserify-shader": "^0.1.2",
+    "gulp": "^3.9.1",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.9.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Omkar",
+  "license": "ISC"
+}
