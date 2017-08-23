@@ -3,7 +3,6 @@
 
 var Config = require("./Config");
 var Particles = require("./particles/Particles");
-var Webcam = require("./lib/anonymous/components/webcam/Webcam");
 var AModule = require("./modules/AModule");
 
 /**
@@ -25,14 +24,8 @@ Main.prototype = $.extend({}, AModule.prototype, {
 
     // particles
     this._particles = new Particles(this._content[0]);
-
-    // webcam
-    this._webcam = new Webcam({
-      dom: document.querySelector(".source__video"),
-      video: true,
-      audio: false
-    });
-    this._webcam.$.on("success", $.proxy(this._onWebcamSuccess, this));
+    const imgPerson = document.getElementById("img-person");
+    this._particles.setTexture(imgPerson, true);
   },
 
   /**
@@ -51,12 +44,6 @@ Main.prototype = $.extend({}, AModule.prototype, {
     AModule.prototype._onResize.call(this);
 
     this._particles.resize();
-  },
-
-  //-----------------------------------------------------o webcam handlers
-
-  _onWebcamSuccess: function() {
-    this._particles.setTexture(this._webcam.dom, true);
   }
 });
 

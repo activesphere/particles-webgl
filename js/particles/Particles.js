@@ -189,8 +189,8 @@ Particles.prototype = {
     }
   },
 
-  setTexture: function(dom, autoUpdate) {
-    this._texture = dom;
+  setTexture: function(img, autoUpdate) {
+    this._texture = img;
     this.needsUpdate = true;
     this.autoUpdate = Boolean(autoUpdate);
   },
