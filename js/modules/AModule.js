@@ -13,10 +13,6 @@ var AModule = (module.exports = function() {});
 
 AModule.prototype = {
   init: function() {
-    this._displayCredits();
-
-    $(".link--sources").animate({ opacity: 1 }, 500, Easing.outQuad, null, 500);
-
     // resize
     Stage.$window.on("resize", $.proxy(this._onResize, this));
     Stage.resize();
@@ -25,23 +21,12 @@ AModule.prototype = {
   /**
      * Drawing on requestAnimationFrame
      */
-  update: function() {
-  },
+  update: function() {},
 
   /**
      * Triggered on window resize
      */
   _onResize: function() {
     Stage.resize();
-  },
-
-  _displayCredits: function() {
-    if ($.browser.webkit) {
-      console.log(
-        "%cʕʘᴥʘʔ︎",
-        "color: #A89E8F; font-size: 54px; font-family: courier new; line-height: 50px;"
-      );
-      console.log("");
-    }
   }
 };
