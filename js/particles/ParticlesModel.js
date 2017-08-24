@@ -13,33 +13,27 @@ ParticlesModel.prototype = {
     this.data = {
       // texture
       threshold: 0,
-      smoothness: 1,
-      strength: 0.32,
+      smoothness: 2,
+      strength: 0.35,
 
       // look & feel
       initialAttraction: 0,
       frictions: 0.0,
-      resetStacked: false,
+      resetStacked: true,
       stackSensibility: 0.8,
 
-      // repulsion: false,
-      // repulsionRadius: 3.0,
-      // repulsionStrength: 0.0009,
-      // repulsionSensibility: 0.80,
+      // repulsion: true,
+      // repulsionRadius: 0.5,
+      // repulsionStrength: 0.0005,
+      // repulsionSensibility: 0.8,
 
-      velocityMax: 0.5,
-      mapStrength: 0.0015,
-      pointSize: 2,
+      velocityMax: 0.0150,
+      mapStrength: 0.0500,
+      pointSize: 1,
       alpha: 0.23,
       inverted: true,
-      particlesColor: "#FFFFFF",
-      bgColor: "#1e1e1e"
+      particlesColor: "#ffffff",
+      bgColor: "#4c4c4c"
     };
-
-    var callback = $.proxy(this._onChange, this);
-  },
-
-  _onChange: function() {
-    $(this).trigger("change");
   }
 };
