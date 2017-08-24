@@ -70,7 +70,7 @@ DoubleFBO.prototype = {
         },
         uResolutionOutput: {
           type: "v2",
-          value: new THREE.Vector2(window.innerWidth, window.innerHeight)
+          value: new THREE.Vector2(80, 80)
         },
 
         uTexturePosition: { type: "t", value: null },
@@ -88,7 +88,7 @@ DoubleFBO.prototype = {
         uRepulsion: { type: "i", value: null },
         uRepulsionStrength: { type: "f", value: null },
         uRepulsionSensibility: { type: "f", value: null },
-        // uRepulsionRadius: { type: "f", value: null },
+        uRepulsionRadius: { type: "f", value: null },
         uInvert: { type: "i", value: null },
 
         uThreshold: { type: "f", value: 0.25 },
@@ -132,8 +132,8 @@ DoubleFBO.prototype = {
 
   getRenderTarget: function(type, width, height) {
     var renderTarget = new THREE.WebGLRenderTarget(width, height, {
-      // wrapS: THREE.ClampToEdgeWrapping,
-      // wrapT: THREE.ClampToEdgeWrapping,
+      wrapS: THREE.ClampToEdgeWrapping,
+      wrapT: THREE.ClampToEdgeWrapping,
       minFilter: THREE.NearestFilter,
       magFilter: THREE.NearestFilter,
       format: type,

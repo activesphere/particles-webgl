@@ -103,10 +103,6 @@ Particles.prototype = {
     this._onControllerChange();
 
     this.resize();
-
-    console.log(
-      "Running " + Config.TEXTURE_WIDTH * Config.TEXTURE_WIDTH + " particles"
-    );
   },
 
   destroy: function() {},
@@ -116,8 +112,8 @@ Particles.prototype = {
       if (this.needsUpdate || this.autoUpdate) {
         this.needsUpdate = false;
 
-        var ww = window.innerWidth,
-          wh = window.innerHeight,
+        var ww = Config.windowWidth,
+          wh = Config.windowHeight,
           x,
           y,
           w,
@@ -145,8 +141,6 @@ Particles.prototype = {
 
       this._doubleFBO.render();
 
-      //this._renderer.render(this._sceneRender, this._renderCamera);
-
       this._renderer.render(
         this._sceneRender,
         this._renderCamera,
@@ -158,10 +152,8 @@ Particles.prototype = {
 
   resize: function() {
     if (this._doubleFBO) {
-      this._width = window.innerWidth; // > Config.MAX_SCREEN_WIDTH ? Config.MAX_SCREEN_WIDTH : window.innerWidth;
-      this._height = window.innerHeight;
-      // this._width = 498;
-      // this._height = 374;
+      this._width = Config.windowWidth;
+      this._height = Config.windowHeight;
 
       this._canvas.width = this._width;
       this._canvas.height = this._height;
@@ -246,7 +238,7 @@ Particles.prototype = {
       data.repulsionStrength;
     this._doubleFBO.positionShader.uniforms.uRepulsionSensibility.value =
       data.repulsionSensibility;
-    // this._doubleFBO.positionShader.uniforms.uRepulsionRadius.value = data.repulsionRadius;
+    this._doubleFBO.positionShader.uniforms.uRepulsionRadius.value = data.repulsionRadius;
     this._doubleFBO.positionShader.uniforms.uThreshold.value = data.threshold;
     this._doubleFBO.positionShader.uniforms.uSmoothness.value = data.smoothness;
     this._doubleFBO.positionShader.uniforms.uMapStrength.value = data.strength;
