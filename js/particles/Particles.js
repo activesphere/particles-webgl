@@ -140,7 +140,6 @@ Particles.prototype = {
       }
 
       this._doubleFBO.render();
-
       this._renderer.render(
         this._sceneRender,
         this._renderCamera,
@@ -187,8 +186,6 @@ Particles.prototype = {
     this.autoUpdate = Boolean(autoUpdate);
   },
 
-  //-----------------------------------------------------o private
-
   _resetRenderTarget: function() {
     if (this._rtOutput) this._rtOutput.dispose();
     this._rtOutput = new THREE.WebGLRenderTarget(this._width, this._height, {
@@ -206,8 +203,6 @@ Particles.prototype = {
     this._copyMaterial.map = this._rtOutput;
     this._doubleFBO.positionShader.uniforms.uTextureOutput.value = this._rtOutput;
   },
-
-  //-----------------------------------------------------o controller handler
 
   _onControllerChange: function() {
     var data = this._particlesModel.data;

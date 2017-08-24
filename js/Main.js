@@ -19,11 +19,12 @@ Main.prototype = $.extend({}, AModule.prototype, {
   init: function() {
     AModule.prototype.init.call(this);
 
-    //
     this._content = $("#particles");
 
     // particles
     this._particles = new Particles(this._content[0]);
+    
+    // texture
     const imgPerson = document.getElementById("img-person");
     this._particles.setTexture(imgPerson, true);
   },
