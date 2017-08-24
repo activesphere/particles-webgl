@@ -11,8 +11,8 @@ Usage
 
  1. Install all dependencies: `npm install`
  2. Run: `node browserify.js`.
+ 3. When the build is complete i.e. `js/bundle.js` is created, you can simply launch the animation by opening `index.html` in your browser.
 
 > **Note on module loading:**
-
 > This project uses [Browserify](http://browserify.org/) to load the scripts.
 > Running `node browserify.js` will start Browserify which will build once and watch for changes to the script files. You can find the bundle file built by Browserify created as `js/bundle.js`.
