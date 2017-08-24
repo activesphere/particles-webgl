@@ -70,7 +70,7 @@ DoubleFBO.prototype = {
         },
         uResolutionOutput: {
           type: "v2",
-          value: new THREE.Vector2(80, 80)
+          value: new THREE.Vector2(Config.windowWidth, Config.windowHeight)
         },
 
         uTexturePosition: { type: "t", value: null },
