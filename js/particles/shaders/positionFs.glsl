@@ -42,11 +42,7 @@ vec4 threshold(sampler2D image, vec2 uv, float threshold, float smoothness)
 vec2 repulsionForce(vec2 position, vec2 d)
 {
     vec4 color = texture2D(uTextureOutput, position + d / uResolutionOutput.xy);
-
-    if(color.r > 0.2)
-        return d;
-    else
-        return vec2(0.0);
+    return color.r > 0.2 ? d: vec2(0.0);
 }
 
 vec4 normalMap(sampler2D image, vec2 uv, float strength)
@@ -58,8 +54,9 @@ vec4 normalMap(sampler2D image, vec2 uv, float strength)
     vec4 bottom = texture2D(image, uv + offsets.xy / uResolutionOutput);
     vec4 color = vec4(1.0) - vec4((left.r - right.r) * 0.5 + 0.5, (top.r - bottom.r) * 0.5 + 0.5, 0., 1.0);
 
-    if(uInvert == 1) 
+    if(uInvert == 1) {
         color = vec4(1.0) - color;
+    }
 
     return color;
 }
@@ -71,57 +68,55 @@ void main()
     vec2 velocity = tex.zw;
     vec2 positionInit = texture2D(uTexturePositionInit, vUv).xy;
 
-    vec2 nmPosition = position;//(position * uResolutionOutput.xy / uResolutionInput.xy); //* vec2(uResolutionInput.x / uResolutionOutput.x);
+    vec2 nmPosition = (position * uResolutionOutput.xy / uResolutionInput.xy) * vec2(uResolutionInput.x / uResolutionOutput.x);
 
     vec2 nm = normalMap(uTextureInput, nmPosition, uMapStrength).xy - .5;
 
     vec2 positionDelta = positionInit - position;
     
     // repulsion
-    // vec2 repulsion = vec2(.0);
-    // int count = 0;
-    // if(uRepulsion == 1)
-    // {
-    // 	const float w = 3.;
-    // 	const float l = w * w;
-    // 	float fw = floor(w / 2.);
+    vec2 repulsion = vec2(.0);
+    int count = 0;
+    if(uRepulsion == 1) {
+        const float w = 3.;
+        const float l = w * w;
+        float fw = floor(w / 2.);
 
-    // 	float orientation = atan(velocity.y, velocity.x);
-    // 	float d = 1.;
-    // 	vec2 v = vec2(floor(cos(orientation) * d + 0.5), floor(sin(orientation) * d + 0.5));
+        float orientation = atan(velocity.y, velocity.x);
+        float d = 1.;
+        vec2 v = vec2(floor(cos(orientation) * d + 0.5), floor(sin(orientation) * d + 0.5));
 
-    // 	for (float i = 0.; i < l; i++)
-    // 	{
-    // 		float col = mod(i, w) - fw + v.x;
-    // 		float row = floor(i / w) - fw + v.y;
+        for (float i = 0.; i < l; i++) {
+            float col = mod(i, w) - fw + v.x;
+            float row = floor(i / w) - fw + v.y;
 
-    // 		vec2 outputPosition = vec2(col, row);
-    // 		vec4 outputTx = texture2D(uTextureOutput, position + outputPosition / uResolutionOutput.xy);
+            vec2 outputPosition = vec2(col, row);
+            vec4 outputTx = texture2D(uTextureOutput, position + outputPosition / uResolutionOutput.xy);
 
-    // 		if(outputTx.a > uRepulsionSensibility)
-    // 		{
-    // 			count++;
-    // 			repulsion -= outputPosition;
-    // 		}
-    // 	}
+            if(outputTx.a > uRepulsionSensibility) {
+                count++;
+                repulsion -= outputPosition;
+            }
+        }
 
-    // 	if(count > 0)
-    // 		repulsion = (repulsion) * vec2(uRepulsionStrength) / vec2(count);
-    // }
+        if(count > 0)
+            repulsion = (repulsion) * vec2(uRepulsionStrength) / vec2(count);
+    }
 
     velocity += nm * uStrength + positionDelta * uAttraction;// + repulsion;
     velocity *= uFrictions;
 
     vec2 maxVel = vec2(uVelocityMax);
-    if(velocity.x > uVelocityMax || velocity.x < -uVelocityMax || velocity.y > uVelocityMax || velocity.y < -uVelocityMax)
+    if(velocity.x > uVelocityMax || velocity.x < -uVelocityMax || velocity.y > uVelocityMax || velocity.y < -uVelocityMax) {
         velocity *= 0.7;
+    }
 
     vec2 newPosition = position + velocity;
 
-    if(newPosition.x > 1.0 || newPosition.x < 0.0 || newPosition.y > 1.0 || newPosition.y < 0.0)
+    if(newPosition.x > 1.0 || newPosition.x < 0.0 || newPosition.y > 1.0 || newPosition.y < 0.0) {
         newPosition = positionInit;
-    else if(uResetStacked == 1)
-    {
+    }
+    else if(uResetStacked == 1) {
         vec4 outputTx = texture2D(uTextureOutput, newPosition);
 
         if(outputTx.a > uStackSensibility)
