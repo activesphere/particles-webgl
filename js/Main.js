@@ -1,23 +1,23 @@
 "use strict";
 
-
+var $ = require("./lib/zepto/zepto");
+var Stage = require("./particles/Stage");
 var Config = require("./Config");
 var Particles = require("./particles/Particles");
-var AModule = require("./modules/AModule");
 
 /**
  * Main
  * @constructor
  */
 var Main = function() {
-  AModule.apply(this);
-
   this.init();
 };
 
 Main.prototype = $.extend({}, AModule.prototype, {
   init: function() {
-    AModule.prototype.init.call(this);
+    // resize
+    Stage.$window.on("resize", $.proxy(this._onResize, this));
+    Stage.resize();
 
     this._content = $("#particles");
 
@@ -42,8 +42,7 @@ Main.prototype = $.extend({}, AModule.prototype, {
 	 * Triggered on window resize
 	 */
   _onResize: function() {
-    AModule.prototype._onResize.call(this);
-
+    Stage.resize();    
     this._particles.resize();
   }
 });
