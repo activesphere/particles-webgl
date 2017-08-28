@@ -13,7 +13,7 @@ var Main = function() {
   this.init();
 };
 
-Main.prototype = $.extend({}, AModule.prototype, {
+Main.prototype = {
   init: function() {
     // resize
     Stage.$window.on("resize", $.proxy(this._onResize, this));
@@ -34,8 +34,6 @@ Main.prototype = $.extend({}, AModule.prototype, {
 	 */
   update: function() {
     this._particles.update();
-
-    AModule.prototype.update.call(this);
   },
 
   /**
@@ -45,7 +43,7 @@ Main.prototype = $.extend({}, AModule.prototype, {
     Stage.resize();    
     this._particles.resize();
   }
-});
+};
 
 /**
  * Let's roll
