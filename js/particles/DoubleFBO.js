@@ -1,32 +1,27 @@
-"use strict";
+const THREE = require("./../lib/three");
 
-var THREE = require("./../lib/three");
+// shaders
+const copyVs = require("./shaders/copyVs.glsl");
+const copyFs = require("./shaders/copyFs.glsl");
+const positionFs = require("./shaders/positionFs.glsl");
 
-var copyVs = require("./shaders/copyVs.glsl");
-var copyFs = require("./shaders/copyFs.glsl");
+class DoubleFBO {
+  constructor(width, renderer, textureInput) {
+    this._width = width;
+    this._particles = width * width;
+    this._renderer = renderer;
+    this._scene = new THREE.Scene();
+    this._camera = new THREE.Camera();
+    this._camera.position.z = 1;
+    this._textureInput = textureInput;
+    this._pingPong = true;
 
-var positionFs = require("./shaders/positionFs.glsl");
+    this.texture = this._createTexture();
 
-/**
- * DoubleFBO
- * @constructor
- */
-var DoubleFBO = (module.exports = function(width, renderer, textureInput) {
-  this._width = width;
-  this._particles = width * width;
-  this._renderer = renderer;
-  this._scene = new THREE.Scene();
-  this._camera = new THREE.Camera();
-  this._camera.position.z = 1;
-  this._textureInput = textureInput;
+    this.init();
+  }
 
-  this._pingPong = true;
-
-  this.init();
-});
-
-DoubleFBO.prototype = {
-  init: function() {
+  init() {
     var gl = this._renderer.getContext();
 
     //TODO manage errors
@@ -110,9 +105,9 @@ DoubleFBO.prototype = {
     // Init position
     this._renderTexture(this._dtPosition, this._rtPosition1);
     //this._renderTexture(this._rtPosition1, this._rtPosition2);
-  },
+  }
 
-  render: function() {
+  render() {
     this._renderShader(this._rtPosition1, this._rtPosition2);
 
     if (this._pingPong)
@@ -120,17 +115,17 @@ DoubleFBO.prototype = {
     else this._renderShader(this._rtPosition2, this._rtPosition1);
 
     this._pingPong = !this._pingPong;
-  },
+  }
 
-  resize: function(width, height) {
+  resize(width, height) {
     this.positionShader.uniforms.uResolutionOutput.value.x = width;
     this.positionShader.uniforms.uResolutionOutput.value.y = height;
 
     this.positionShader.uniforms.uResolutionInput.value.x = width;
     this.positionShader.uniforms.uResolutionInput.value.y = height;
-  },
+  }
 
-  getRenderTarget: function(type, width, height) {
+  getRenderTarget(type, width, height) {
     var renderTarget = new THREE.WebGLRenderTarget(width, height, {
       wrapS: THREE.ClampToEdgeWrapping,
       wrapT: THREE.ClampToEdgeWrapping,
@@ -143,27 +138,42 @@ DoubleFBO.prototype = {
     renderTarget.generateMipmaps = false;
 
     return renderTarget;
-  },
+  }
 
   //-----------------------------------------------------o private
 
-  _renderTexture: function(input, output) {
+  _createTexture() {
+    const texture = new THREE.DataTexture(
+      a,
+      this._width,
+      this._width,
+      THREE.RGBAFormat,
+      THREE.FloatType
+    );
+    texture.minFilter = THREE.NearestFilter;
+    texture.magFilter = THREE.NearestFilter;
+    texture.needsUpdate = true;
+    texture.flipY = false;
+    return texture;
+  }
+
+  _renderTexture(input, output) {
     this._mesh.material = this._copyShader;
 
     this._copyShader.uniforms.uTexture.value = input;
 
     this._renderer.render(this._scene, this._camera, output);
-  },
+  }
 
-  _renderShader: function(input, output) {
+  _renderShader(input, output) {
     this._mesh.material = this.positionShader;
 
     this.positionShader.uniforms.uTexturePosition.value = input;
 
     this._renderer.render(this._scene, this._camera, output);
-  },
+  }
 
-  _initPositionTexture: function() {
+  _initPositionTexture() {
     var entries = 4;
     var a = new Float32Array(this._particles * entries);
 
@@ -191,19 +201,7 @@ DoubleFBO.prototype = {
       a[i + 2] = vx;
       a[i + 3] = vy;
     }
-
-    var texture = new THREE.DataTexture(
-      a,
-      this._width,
-      this._width,
-      THREE.RGBAFormat,
-      THREE.FloatType
-    );
-    texture.minFilter = THREE.NearestFilter;
-    texture.magFilter = THREE.NearestFilter;
-    texture.needsUpdate = true;
-    texture.flipY = false;
-
-    return texture;
   }
-};
+}
+
+module.export = DoubleFBO;
