@@ -1,15 +1,5 @@
-"use strict";
-
-/**
- * Controller
- * @constructor
- */
-var ParticlesModel = (module.exports = function() {
-  this.init();
-});
-
-ParticlesModel.prototype = {
-  init: function() {
+class ParticlesModel {
+  constructor() {
     this.data = {
       // texture
       threshold: 0,
@@ -37,3 +27,5 @@ ParticlesModel.prototype = {
     };
   }
 };
+
+module.exports = ParticlesModel;
