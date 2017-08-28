@@ -1,29 +1,22 @@
 "use strict";
 
-var THREE = require("./../lib/three");
-var DoubleFBO = require("./DoubleFBO");
-var ParticlesModel = require("./ParticlesModel");
-var ParticlesGeometry = require("./ParticlesGeometry");
+const THREE = require("./../lib/three");
+const DoubleFBO = require("./DoubleFBO");
+const ParticlesModel = require("./ParticlesModel");
+const ParticlesGeometry = require("./ParticlesGeometry");
 
-var particlesVs = require("./shaders/particlesVs.glsl");
-var particlesFs = require("./shaders/particlesFs.glsl");
+// shaders
+const particlesVs = require("./shaders/particlesVs.glsl");
+const particlesFs = require("./shaders/particlesFs.glsl");
 
-/**
- * Particles
- * @constructor
- */
-var Particles = (module.exports = function($dom) {
-  this.$dom = $dom;
+class Particles {
 
-  this.init();
-});
-
-Particles.prototype = {
-  init: function() {
+  constructor($dom) {
+    this.$dom = $dom;
     this._initScene();
-  },
+  }
 
-  _initScene: function() {
+  _initScene() {
     this._canvas = document.createElement("canvas");
     this._context = this._canvas.getContext("2d");
 
@@ -50,7 +43,6 @@ Particles.prototype = {
     this.$dom.appendChild(this._renderer.domElement);
 
     if (!this._renderer.context) {
-      //TODO error / fallback
       return;
     }
 
@@ -103,11 +95,11 @@ Particles.prototype = {
     this._onControllerChange();
 
     this.resize();
-  },
+  }
 
-  destroy: function() {},
+  destroy() {}
 
-  update: function() {
+  update() {
     if (this._doubleFBO && this._rtOutput) {
       if (this.needsUpdate || this.autoUpdate) {
         this.needsUpdate = false;
@@ -147,9 +139,9 @@ Particles.prototype = {
       );
       this._renderer.render(this._scene, this._renderCamera);
     }
-  },
+  }
 
-  resize: function() {
+  resize() {
     if (this._doubleFBO) {
       this._width = Config.windowWidth;
       this._height = Config.windowHeight;
@@ -178,15 +170,15 @@ Particles.prototype = {
 
       if (this._texture) this.needsUpdate = true;
     }
-  },
+  }
 
-  setTexture: function(img, autoUpdate) {
+  setTexture(img, autoUpdate) {
     this._texture = img;
     this.needsUpdate = true;
     this.autoUpdate = Boolean(autoUpdate);
-  },
+  }
 
-  _resetRenderTarget: function() {
+  _resetRenderTarget() {
     if (this._rtOutput) this._rtOutput.dispose();
     this._rtOutput = new THREE.WebGLRenderTarget(this._width, this._height, {
       wrapS: THREE.RepeatWrapping,
@@ -202,9 +194,9 @@ Particles.prototype = {
     this._rtOutput.generateMipmaps = false;
     this._copyMaterial.map = this._rtOutput;
     this._doubleFBO.positionShader.uniforms.uTextureOutput.value = this._rtOutput;
-  },
+  }
 
-  _onControllerChange: function() {
+  _onControllerChange() {
     var data = this._particlesModel.data;
 
     document.getElementById("canvas").style.backgroundColor = data.bgColor;
@@ -242,3 +234,5 @@ Particles.prototype = {
       : 1;
   }
 };
+
+module.exports = Particles;
