@@ -16,8 +16,6 @@ class DoubleFBO {
     this._textureInput = textureInput;
     this._pingPong = true;
 
-    this.texture = this._createTexture();
-
     this.init();
   }
 
@@ -140,23 +138,6 @@ class DoubleFBO {
     return renderTarget;
   }
 
-  //-----------------------------------------------------o private
-
-  _createTexture() {
-    const texture = new THREE.DataTexture(
-      a,
-      this._width,
-      this._width,
-      THREE.RGBAFormat,
-      THREE.FloatType
-    );
-    texture.minFilter = THREE.NearestFilter;
-    texture.magFilter = THREE.NearestFilter;
-    texture.needsUpdate = true;
-    texture.flipY = false;
-    return texture;
-  }
-
   _renderTexture(input, output) {
     this._mesh.material = this._copyShader;
 
@@ -174,13 +155,11 @@ class DoubleFBO {
   }
 
   _initPositionTexture() {
-    var entries = 4;
-    var a = new Float32Array(this._particles * entries);
+    const entries = 4;
+    const a = new Float32Array(this._particles * entries);
+    const len = a.length;
 
-    var l = a.length;
-    //var rand = 1 / l;
-
-    for (var i = 0; i < l; i += entries) {
+    for (var i = 0; i < len; i += entries) {
       var x =
         Math.random() *
         this._textureInput.image.width /
@@ -189,19 +168,31 @@ class DoubleFBO {
         Math.random() *
         this._textureInput.image.height /
         this._textureInput.image.height;
-      //var x = ((i/entries) % this._width) / this._width + (Math.random() - 0.5) * rand;
-      //var y = ((i/entries | 0) / this._width) / this._width + (Math.random() - 0.5) * rand;
 
       var ratio = 0.001;
       var vx = (Math.random() - 0.5) * ratio;
       var vy = (Math.random() - 0.5) * ratio;
 
-      a[i + 0] = x; //* 2 - 1;
-      a[i + 1] = y; //* 2 - 1;
+      a[i + 0] = x;
+      a[i + 1] = y;
       a[i + 2] = vx;
       a[i + 3] = vy;
     }
+
+    const texture = new THREE.DataTexture(
+      a,
+      this._width,
+      this._width,
+      THREE.RGBAFormat,
+      THREE.FloatType
+    );
+    texture.minFilter = THREE.NearestFilter;
+    texture.magFilter = THREE.NearestFilter;
+    texture.needsUpdate = true;
+    texture.flipY = false;
+
+    return texture;
   }
 }
 
-module.export = DoubleFBO;
+module.exports = DoubleFBO;
