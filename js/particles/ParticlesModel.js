@@ -17,11 +17,11 @@ class ParticlesModel {
       // repulsionStrength: 0.0005,
       // repulsionSensibility: 0.8,
 
-      velocityMax: 0.0150,
+      velocityMax: 0.0015,
       mapStrength: 0.0500,
-      pointSize: 1,
-      alpha: 0.23,
-      inverted: true,
+      pointSize: 2,
+      alpha: 0.25,
+      inverted: false,
       particlesColor: "#ffffff",
       bgColor: "#4c4c4c"
     };
