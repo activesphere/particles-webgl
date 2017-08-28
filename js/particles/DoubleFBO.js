@@ -22,7 +22,6 @@ class DoubleFBO {
   init() {
     var gl = this._renderer.getContext();
 
-    //TODO manage errors
     if (!gl.getExtension("OES_texture_float")) {
       alert("No OES_texture_float support for float textures!");
       return;
@@ -102,7 +101,6 @@ class DoubleFBO {
 
     // Init position
     this._renderTexture(this._dtPosition, this._rtPosition1);
-    //this._renderTexture(this._rtPosition1, this._rtPosition2);
   }
 
   render() {
@@ -156,8 +154,8 @@ class DoubleFBO {
 
   _initPositionTexture() {
     const entries = 4;
-    const a = new Float32Array(this._particles * entries);
-    const len = a.length;
+    const arr = new Float32Array(this._particles * entries);
+    const len = arr.length;
 
     for (var i = 0; i < len; i += entries) {
       var x =
@@ -173,14 +171,14 @@ class DoubleFBO {
       var vx = (Math.random() - 0.5) * ratio;
       var vy = (Math.random() - 0.5) * ratio;
 
-      a[i + 0] = x;
-      a[i + 1] = y;
-      a[i + 2] = vx;
-      a[i + 3] = vy;
+      arr[i + 0] = x;
+      arr[i + 1] = y;
+      arr[i + 2] = vx;
+      arr[i + 3] = vy;
     }
 
     const texture = new THREE.DataTexture(
-      a,
+      arr,
       this._width,
       this._width,
       THREE.RGBAFormat,
