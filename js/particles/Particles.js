@@ -33,10 +33,7 @@ class Particles {
     this._textureInput.wrapS = THREE.ClampToEdgeWrapping;
     this._textureInput.wrapT = THREE.ClampToEdgeWrapping;
 
-    this._renderer = new THREE.WebGLRenderer({
-      alpha: true /*, preserveDrawingBuffer: true*/
-    });
-    //this._renderer.autoClear = false;
+    this._renderer = new THREE.WebGLRenderer({ alpha: true });
     this._renderer.sortObjects = false;
     this._renderer.domElement.setAttribute("id", "canvas");
     this.$dom.appendChild(this._renderer.domElement);
@@ -61,7 +58,7 @@ class Particles {
       depthTest: false,
       transparent: true
     });
-    const mesh = new THREE.PointCloud(geometry, material);
+    const mesh = new THREE.Points(geometry, material);
     this._sceneRender.add(mesh);
 
     this._copyMaterial = new THREE.MeshBasicMaterial({
@@ -84,11 +81,7 @@ class Particles {
 
     // Controller
     this._particlesModel = new ParticlesModel();
-    $(this._particlesModel).on(
-      "change",
-      $.proxy(this._onControllerChange, this)
-    );
-    this._onControllerChange();
+    this._initShaderParams();
 
     this.resize();
   }
@@ -96,9 +89,10 @@ class Particles {
   destroy() {}
 
   update() {
-    if(!this._doubleFBO || !this._rtOutput) {
+    if (!this._doubleFBO || !this._rtOutput) {
       return;
     }
+    
     if (this.needsUpdate || this.autoUpdate) {
       this.needsUpdate = false;
 
@@ -107,7 +101,7 @@ class Particles {
       var x, y, w, h;
       const r = this._texture.width / this._texture.height;
       const wr = ww / wh;
-      
+
       if (wr < r) {
         h = wh;
         w = h * r;
@@ -149,11 +143,11 @@ class Particles {
 
       this._renderer.setSize(this._width, this._height);
 
-      if(this._resizeTimer) { 
+      if (this._resizeTimer) {
         clearTimeout(this._resizeTimer);
       }
 
-      if(!this._rtOutput) { 
+      if (!this._rtOutput) {
         this._resetRenderTarget();
       } else {
         const that = this;
@@ -162,7 +156,7 @@ class Particles {
         }, 50);
       }
 
-      if(this._texture) {
+      if (this._texture) {
         this.needsUpdate = true;
       }
     }
@@ -175,7 +169,10 @@ class Particles {
   }
 
   _resetRenderTarget() {
-    if (this._rtOutput) this._rtOutput.dispose();
+    if(this._rtOutput) {
+      this._rtOutput.dispose();
+    }
+
     this._rtOutput = new THREE.WebGLRenderTarget(this._width, this._height, {
       wrapS: THREE.RepeatWrapping,
       wrapT: THREE.RepeatWrapping,
@@ -187,48 +184,70 @@ class Particles {
       anisotropy: 0,
       depthBuffer: false
     });
+    
     this._rtOutput.generateMipmaps = false;
+    
     this._copyMaterial.map = this._rtOutput;
-    this._doubleFBO.positionShader.uniforms.uTextureOutput.value = this._rtOutput;
+    
+    this._doubleFBO.positionShader.uniforms.uTextureOutput.value = 
+      this._rtOutput;
   }
 
-  _onControllerChange() {
+  _initShaderParams() {
     const data = this._particlesModel.data;
 
     document.getElementById("canvas").style.backgroundColor = data.bgColor;
 
     this._uniforms.uPointSize.value = data.pointSize;
+
     this._uniforms.uAlpha.value = data.alpha;
+    
     this._uniforms.uColor.value = new THREE.Color(data.particlesColor);
 
     this._doubleFBO.positionShader.uniforms.uFrictions.value =
       1 - data.frictions;
-    this._doubleFBO.positionShader.uniforms.uStrength.value = data.mapStrength;
-    this._doubleFBO.positionShader.uniforms.uSpring.value = data.spring;
+
+    this._doubleFBO.positionShader.uniforms.uStrength.value = 
+      data.mapStrength;
+
+    this._doubleFBO.positionShader.uniforms.uSpring.value = 
+      data.spring;
+    
     this._doubleFBO.positionShader.uniforms.uVelocityMax.value =
       data.velocityMax;
+    
     this._doubleFBO.positionShader.uniforms.uAttraction.value =
       data.initialAttraction;
-    this._doubleFBO.positionShader.uniforms.uResetStacked.value = data.resetStacked
-      ? 1
-      : 0;
+    
+    this._doubleFBO.positionShader.uniforms.uResetStacked.value = 
+      data.resetStacked ? 1 : 0;
+
     this._doubleFBO.positionShader.uniforms.uStackSensibility.value =
       data.stackSensibility;
-    this._doubleFBO.positionShader.uniforms.uRepulsion.value = data.repulsion
-      ? 1
-      : 0;
+
+    this._doubleFBO.positionShader.uniforms.uRepulsion.value = 
+      data.repulsion ? 1 : 0;
+
     this._doubleFBO.positionShader.uniforms.uRepulsionStrength.value =
       data.repulsionStrength;
+
     this._doubleFBO.positionShader.uniforms.uRepulsionSensibility.value =
       data.repulsionSensibility;
+
     this._doubleFBO.positionShader.uniforms.uRepulsionRadius.value =
       data.repulsionRadius;
-    this._doubleFBO.positionShader.uniforms.uThreshold.value = data.threshold;
-    this._doubleFBO.positionShader.uniforms.uSmoothness.value = data.smoothness;
-    this._doubleFBO.positionShader.uniforms.uMapStrength.value = data.strength;
-    this._doubleFBO.positionShader.uniforms.uInvert.value = data.inverted
-      ? 0
-      : 1;
+
+    this._doubleFBO.positionShader.uniforms.uThreshold.value = 
+      data.threshold;
+
+    this._doubleFBO.positionShader.uniforms.uSmoothness.value = 
+      data.smoothness;
+    
+    this._doubleFBO.positionShader.uniforms.uMapStrength.value = 
+      data.strength;
+    
+    this._doubleFBO.positionShader.uniforms.uInvert.value = 
+      data.inverted ? 0 : 1;
   }
 }
 
