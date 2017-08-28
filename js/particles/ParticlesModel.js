@@ -8,20 +8,21 @@ class ParticlesModel {
 
       // look & feel
       initialAttraction: 0,
-      frictions: 0.0,
+      frictions: 0,
       resetStacked: true,
       stackSensibility: 0.8,
 
-      // repulsion: true,
-      // repulsionRadius: 0.5,
-      // repulsionStrength: 0.0005,
-      // repulsionSensibility: 0.8,
+      // repulsion
+      repulsion: true,
+      repulsionRadius: 0.5,
+      repulsionStrength: 0.0050,
+      repulsionSensibility: 0.8,
 
       velocityMax: 0.0015,
       mapStrength: 0.0500,
-      pointSize: 2,
+      pointSize: 1,
       alpha: 0.25,
-      inverted: false,
+      inverted: true,
       particlesColor: "#ffffff",
       bgColor: "#4c4c4c"
     };

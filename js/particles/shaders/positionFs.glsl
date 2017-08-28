@@ -103,7 +103,7 @@ void main()
             repulsion = (repulsion) * vec2(uRepulsionStrength) / vec2(count);
     }
 
-    velocity += nm * uStrength + positionDelta * uAttraction;// + repulsion;
+    velocity += nm * uStrength + positionDelta * uAttraction + repulsion;
     velocity *= uFrictions;
 
     vec2 maxVel = vec2(uVelocityMax);
