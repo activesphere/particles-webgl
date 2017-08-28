@@ -1,20 +1,11 @@
-"use strict";
+const $ = require("./lib/zepto");
+const Stage = require("./particles/Stage");
+const Config = require("./Config");
+const Particles = require("./particles/Particles");
 
-var $ = require("./lib/zepto");
-var Stage = require("./particles/Stage");
-var Config = require("./Config");
-var Particles = require("./particles/Particles");
 
-/**
- * Main
- * @constructor
- */
-var Main = function() {
-  this.init();
-};
-
-Main.prototype = {
-  init: function() {
+class Main {
+  constructor() {
     // resize
     Stage.$window.on("resize", $.proxy(this._onResize, this));
     Stage.resize();
@@ -27,32 +18,24 @@ Main.prototype = {
     // texture
     const imgPerson = document.getElementById("img-person");
     this._particles.setTexture(imgPerson, true);
-  },
+  }
 
-  /**
-	 * Drawing on requestAnimationFrame
-	 */
-  update: function() {
+  update() {
     this._particles.update();
-  },
+  }
 
-  /**
-	 * Triggered on window resize
-	 */
-  _onResize: function() {
-    Stage.resize();    
+  _onResize() {
+    Stage.resize();
     this._particles.resize();
   }
 };
 
-/**
- * Let's roll
- */
+// entry point
 Stage.$document.ready(function() {
-  var main = new Main();
-
-  (function tick() {
+  const main = new Main();
+  const tick = () => {
     main.update();
     window.requestAnimationFrame(tick);
-  })();
+  };
+  tick();
 });
