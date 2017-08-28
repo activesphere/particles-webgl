@@ -20,7 +20,7 @@ class DoubleFBO {
   }
 
   init() {
-    var gl = this._renderer.getContext();
+    const gl = this._renderer.getContext();
 
     if (!gl.getExtension("OES_texture_float")) {
       alert("No OES_texture_float support for float textures!");
@@ -106,9 +106,11 @@ class DoubleFBO {
   render() {
     this._renderShader(this._rtPosition1, this._rtPosition2);
 
-    if (this._pingPong)
+    if (this._pingPong) {
       this._renderShader(this._rtPosition1, this._rtPosition2);
-    else this._renderShader(this._rtPosition2, this._rtPosition1);
+    } else { 
+      this._renderShader(this._rtPosition2, this._rtPosition1);
+    }
 
     this._pingPong = !this._pingPong;
   }
@@ -122,7 +124,7 @@ class DoubleFBO {
   }
 
   getRenderTarget(type, width, height) {
-    var renderTarget = new THREE.WebGLRenderTarget(width, height, {
+    const renderTarget = new THREE.WebGLRenderTarget(width, height, {
       wrapS: THREE.ClampToEdgeWrapping,
       wrapT: THREE.ClampToEdgeWrapping,
       minFilter: THREE.NearestFilter,
@@ -157,19 +159,19 @@ class DoubleFBO {
     const arr = new Float32Array(this._particles * entries);
     const len = arr.length;
 
-    for (var i = 0; i < len; i += entries) {
-      var x =
+    for (let i = 0; i < len; i += entries) {
+      const x =
         Math.random() *
         this._textureInput.image.width /
         this._textureInput.image.width;
-      var y =
+      const y =
         Math.random() *
         this._textureInput.image.height /
         this._textureInput.image.height;
 
-      var ratio = 0.001;
-      var vx = (Math.random() - 0.5) * ratio;
-      var vy = (Math.random() - 0.5) * ratio;
+      const ratio = 0.001;
+      const vx = (Math.random() - 0.5) * ratio;
+      const vy = (Math.random() - 0.5) * ratio;
 
       arr[i + 0] = x;
       arr[i + 1] = y;
