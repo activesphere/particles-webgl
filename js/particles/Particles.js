@@ -10,7 +10,6 @@ const particlesVs = require("./shaders/particlesVs.glsl");
 const particlesFs = require("./shaders/particlesFs.glsl");
 
 class Particles {
-
   constructor($dom) {
     this.$dom = $dom;
     this._initScene();
@@ -46,17 +45,15 @@ class Particles {
       return;
     }
 
-    var geometry = new THREE.ParticlesGeometry(Config.TEXTURE_WIDTH);
-
     this._uniforms = {
       uTexturePosition: { type: "t", value: null },
-
       uPointSize: { type: "f", value: 1 },
       uAlpha: { type: "f", value: null },
       uColor: { type: "c", value: null }
     };
 
-    var material = new THREE.ShaderMaterial({
+    const geometry = new THREE.ParticlesGeometry(Config.TEXTURE_WIDTH);
+    const material = new THREE.ShaderMaterial({
       uniforms: this._uniforms,
       vertexShader: particlesVs(),
       fragmentShader: particlesFs(),
@@ -64,8 +61,7 @@ class Particles {
       depthTest: false,
       transparent: true
     });
-
-    var mesh = new THREE.PointCloud(geometry, material);
+    const mesh = new THREE.PointCloud(geometry, material);
     this._sceneRender.add(mesh);
 
     this._copyMaterial = new THREE.MeshBasicMaterial({
@@ -79,7 +75,7 @@ class Particles {
     );
     this._scene.add(this._copyMesh);
 
-    // Double fbo management
+    // Double FBO
     this._doubleFBO = new DoubleFBO(
       Config.TEXTURE_WIDTH,
       this._renderer,
@@ -100,45 +96,43 @@ class Particles {
   destroy() {}
 
   update() {
-    if (this._doubleFBO && this._rtOutput) {
-      if (this.needsUpdate || this.autoUpdate) {
-        this.needsUpdate = false;
+    if(!this._doubleFBO || !this._rtOutput) {
+      return;
+    }
+    if (this.needsUpdate || this.autoUpdate) {
+      this.needsUpdate = false;
 
-        var ww = Config.windowWidth,
-          wh = Config.windowHeight,
-          x,
-          y,
-          w,
-          h;
+      const ww = Config.windowWidth,
+        wh = Config.windowHeight;
+      var x, y, w, h;
+      const r = this._texture.width / this._texture.height;
+      const wr = ww / wh;
+      
+      if (wr < r) {
+        h = wh;
+        w = h * r;
 
-        var r = this._texture.width / this._texture.height;
-        var wr = ww / wh;
-        if (wr < r) {
-          h = wh;
-          w = h * r;
+        x = (ww - w) * 0.5;
+        y = 0;
+      } else {
+        w = ww;
+        h = w / r;
 
-          x = (ww - w) * 0.5;
-          y = 0;
-        } else {
-          w = ww;
-          h = w / r;
-
-          x = 0;
-          y = (wh - h) * 0.5;
-        }
-
-        this._context.drawImage(this._texture, x, y, -w, h);
-        this._textureInput.needsUpdate = true;
+        x = 0;
+        y = (wh - h) * 0.5;
       }
 
-      this._doubleFBO.render();
-      this._renderer.render(
-        this._sceneRender,
-        this._renderCamera,
-        this._rtOutput
-      );
-      this._renderer.render(this._scene, this._renderCamera);
+      this._context.drawImage(this._texture, x, y, -w, h);
+      this._textureInput.needsUpdate = true;
     }
+
+    this._doubleFBO.render();
+    this._renderer.render(
+      this._sceneRender,
+      this._renderCamera,
+      this._rtOutput
+    );
+    this._renderer.render(this._scene, this._renderCamera);
   }
 
   resize() {
@@ -153,22 +147,24 @@ class Particles {
 
       this._doubleFBO.resize(this._width, this._height);
 
-      // var rw = this._textureWidth / this._width;
-      // var rh = this._textureHeight / this._height;
-
       this._renderer.setSize(this._width, this._height);
 
-      if (this._resizeTimer) clearTimeout(this._resizeTimer);
+      if(this._resizeTimer) { 
+        clearTimeout(this._resizeTimer);
+      }
 
-      if (!this._rtOutput) this._resetRenderTarget();
-      else {
-        var that = this;
+      if(!this._rtOutput) { 
+        this._resetRenderTarget();
+      } else {
+        const that = this;
         this._resizeTimer = setTimeout(function() {
           that._resetRenderTarget();
         }, 50);
       }
 
-      if (this._texture) this.needsUpdate = true;
+      if(this._texture) {
+        this.needsUpdate = true;
+      }
     }
   }
 
@@ -197,7 +193,7 @@ class Particles {
   }
 
   _onControllerChange() {
-    var data = this._particlesModel.data;
+    const data = this._particlesModel.data;
 
     document.getElementById("canvas").style.backgroundColor = data.bgColor;
 
@@ -225,7 +221,8 @@ class Particles {
       data.repulsionStrength;
     this._doubleFBO.positionShader.uniforms.uRepulsionSensibility.value =
       data.repulsionSensibility;
-    this._doubleFBO.positionShader.uniforms.uRepulsionRadius.value = data.repulsionRadius;
+    this._doubleFBO.positionShader.uniforms.uRepulsionRadius.value =
+      data.repulsionRadius;
     this._doubleFBO.positionShader.uniforms.uThreshold.value = data.threshold;
     this._doubleFBO.positionShader.uniforms.uSmoothness.value = data.smoothness;
     this._doubleFBO.positionShader.uniforms.uMapStrength.value = data.strength;
@@ -233,6 +230,6 @@ class Particles {
       ? 0
       : 1;
   }
-};
+}
 
 module.exports = Particles;
