@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("./lib/zepto/zepto");
+var $ = require("./lib/zepto");
 var Stage = require("./particles/Stage");
 var Config = require("./Config");
 var Particles = require("./particles/Particles");

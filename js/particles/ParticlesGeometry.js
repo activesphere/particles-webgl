@@ -1,6 +1,6 @@
 "use strict";
 
-var THREE = require("./../lib/three/three");
+var THREE = require("./../lib/three");
 
 /**
  * ParticlesGeometry
