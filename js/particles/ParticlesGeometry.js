@@ -11,17 +11,15 @@ class ParticlesGeometry extends THREE.BufferGeometry {
   init() {
     this.positions = new Float32Array(this.n * 3);
     this.uvs = new Float32Array(this.n * 2);
-    for (var i = 0, l = this.n * 3; i < l; i += 3) {
-      var index, entries;
-      entries = 3;
+    for (let i = 0, l = this.n * 3; i < l; i += 3) {
+      let entries = 3;
+      let index = (i / entries) | 0;
   
-      index = (i / entries) | 0;
+      const u = index % this.width / this.width;
+      const v = ((index / this.width) | 0) / this.width;
+      const z = 0;
   
-      var u = index % this.width / this.width;
-      var v = ((index / this.width) | 0) / this.width;
-      var z = 0;
-  
-      var i3 = index * entries;
+      const i3 = index * entries;
       this.positions[i3] = u;
       this.positions[i3 + 1] = v;
       this.positions[i3 + 2] = z;
