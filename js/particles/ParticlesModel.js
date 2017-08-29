@@ -19,7 +19,7 @@ class ParticlesModel {
       repulsionSensibility: 0.8,
 
       velocityMax: 0.0015,
-      mapStrength: 0.0500,
+      mapStrength: 0.1500,
       pointSize: 1,
       alpha: 0.25,
       inverted: true,
