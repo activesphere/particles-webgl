@@ -17,7 +17,11 @@ class Main {
     
     // texture
     const imgPerson = document.getElementById("img-person");
-    this._particles.setTexture(imgPerson, true);
+    this.setTextureImage(imgPerson);
+  }
+
+  setTextureImage(imgElem) {
+    this._particles.setTexture(imgElem, true);
   }
 
   update() {
@@ -33,6 +37,7 @@ class Main {
 // entry point
 Stage.$document.ready(function() {
   const main = new Main();
+  window.particlesModule = main;
   const tick = () => {
     main.update();
     window.requestAnimationFrame(tick);
