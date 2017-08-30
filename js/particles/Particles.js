@@ -116,7 +116,7 @@ class Particles {
         y = (wh - h) * 0.5;
       }
 
-      this._context.drawImage(this._texture, x, y, -w, h);
+      this._context.drawImage(this._texture, x, y, w, h);
       this._textureInput.needsUpdate = true;
     }
 
@@ -136,8 +136,6 @@ class Particles {
 
       this._canvas.width = this._width;
       this._canvas.height = this._height;
-
-      this._context.scale(-1, 1);
 
       this._doubleFBO.resize(this._width, this._height);
 
