@@ -5,7 +5,6 @@ void main()
 {
     vec2 uv = position.xy;
     vec4 tex = texture2D(uTexturePosition, uv);
-    tex.x = 1.0 - tex.x;
     gl_PointSize = uPointSize;
     gl_Position = vec4(tex.xy * 2.0 - 1.0, 0.0, 1.0);
 }
