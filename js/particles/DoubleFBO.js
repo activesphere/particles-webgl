@@ -23,11 +23,11 @@ class DoubleFBO {
     const gl = this._renderer.getContext();
 
     if (!gl.getExtension("OES_texture_float")) {
-      alert("No OES_texture_float support for float textures!");
+      console.error("No OES_texture_float support for float textures!");
       return;
     }
     if (gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS) === 0) {
-      alert("No support for vertex shader textures!");
+      console.error("No support for vertex shader textures!");
       return;
     }
 
