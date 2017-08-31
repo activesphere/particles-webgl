@@ -21,10 +21,10 @@ class ParticlesModel {
       velocityMax: 0.0075,
       mapStrength: 0.0195,
       pointSize: 1,
-      alpha: 0.23,
+      alpha: 0.35,
       inverted: true,
       particlesColor: "#ffffff",
-      bgColor: "#4c4c4c"
+      bgColor: "#4185db"
     };
   }
 };
