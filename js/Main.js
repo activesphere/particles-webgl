@@ -5,18 +5,20 @@ const Particles = require("./particles/Particles");
 
 
 class Main {
-  constructor() {
+  constructor(name) {
     // resize
     Stage.$window.on("resize", $.proxy(this._onResize, this));
     Stage.resize();
 
-    this._content = $("#particles");
+    this._content = $("#particles-" + name);
 
     // particles
-    this._particles = new Particles(this._content[0]);
+    this._particles = new Particles(this._content[0], name);
     
     // texture
-    const imgPerson = document.getElementById("img-person");
+    const src = name == 'logo' ? name + '.png' : name + '.jpg';
+    console.log(src);
+    const imgPerson = $(`<img src="${src}" />`)[0];
     this.setTextureImage(imgPerson);
   }
 
@@ -36,11 +38,18 @@ class Main {
 
 // entry point
 Stage.$document.ready(function() {
-  const main = new Main();
-  window.particlesModule = main;
-  const tick = () => {
-    main.update();
-    window.requestAnimationFrame(tick);
+  const names = ['logo', 'ciju', 'anantha', 'dinesh', 'naman', 
+    'rohit', 'sreenu', 'rahul']
+
+  const tick = (module) => {
+    module.update();
+    const fn = tick.bind(null, module);
+    window.requestAnimationFrame(fn);
   };
-  tick();
+
+  const modules = {};
+  names.forEach((name) => {
+    modules[name] = new Main(name);
+    tick(modules[name]);
+  });
 });

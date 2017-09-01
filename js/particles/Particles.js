@@ -10,9 +10,10 @@ const particlesVs = require("./shaders/particlesVs.glsl");
 const particlesFs = require("./shaders/particlesFs.glsl");
 
 class Particles {
-  constructor($dom) {
+  constructor($dom, name) {
     this.$dom = $dom;
-    this._initScene();
+    this.canvasId = "canvas-" + name;
+    this._initScene(this.canvasId);
   }
 
   _initScene() {
@@ -35,7 +36,7 @@ class Particles {
 
     this._renderer = new THREE.WebGLRenderer({ alpha: true });
     this._renderer.sortObjects = false;
-    this._renderer.domElement.setAttribute("id", "canvas");
+    this._renderer.domElement.setAttribute("id", this.canvasId);
     this.$dom.appendChild(this._renderer.domElement);
 
     if (!this._renderer.context) {
@@ -194,7 +195,7 @@ class Particles {
   _initShaderParams() {
     const data = this._particlesModel.data;
 
-    document.getElementById("canvas").style.backgroundColor = data.bgColor;
+    document.getElementById(this.canvasId).style.backgroundColor = data.bgColor;
 
     this._uniforms.uPointSize.value = data.pointSize;
 
